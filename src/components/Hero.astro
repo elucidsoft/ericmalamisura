@@ -1,0 +1,200 @@
+---
+import { PERSON } from '../consts';
+---
+
+<section class="hero" id="top">
+  <div class="hero__masthead wrap">
+    <div class="hero__edition mono" data-reveal>
+      <span>Est. 2026</span>
+      <span class="hero__edition-mid">Vol. I — No. 01</span>
+      <span>{PERSON.location}</span>
+    </div>
+    <hr class="rule rule--thick" />
+    <h1 class="hero__name display" data-reveal>{PERSON.name}</h1>
+    <hr class="rule" />
+    <p class="hero__subtitle mono" data-reveal>
+      <span class="nb">World-Leading AI&nbsp;Expert</span> · Programming Language &amp; Systems Architect · Creator of OriLang
+    </p>
+  </div>
+
+  <div class="hero__lead-grid wrap">
+    <div class="hero__story">
+      <span class="eyebrow" data-reveal>The Front Page</span>
+      <p class="hero__lead" data-reveal>
+        <span class="nb">AI expert</span> and creator of the <em>OriLang</em> programming
+        language. He designs compilers, languages, and the systems that run on top of
+        them — a complete body of work, engineered from first principles for the
+        <span class="nb">age of AI</span>.
+      </p>
+      <div class="hero__actions" data-reveal>
+        <a href="/#work" class="btn hover-target" data-magnetic="0.3">Read the work</a>
+        <a href="/#about" class="mono link-underline hover-target">The full story →</a>
+      </div>
+    </div>
+
+    <figure class="hero__feature" data-reveal>
+      <div class="hero__portrait-frame" data-ascii>
+        <img
+          src="/eric.jpg"
+          alt={`Portrait of ${PERSON.name}`}
+          width="640"
+          height="800"
+          loading="eager"
+          fetchpriority="high"
+        />
+      </div>
+      <figcaption class="mono">Fig. 01 — The architect. Hover for the machine's view.</figcaption>
+    </figure>
+  </div>
+
+  <div class="hero__scroll mono" aria-hidden="true">
+    <span>Continued below</span>
+    <span class="hero__scroll-line"></span>
+  </div>
+</section>
+
+<style>
+  .hero {
+    min-height: 100svh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: clamp(2rem, 5vw, 4rem);
+    padding-block: clamp(6rem, 11vh, 8.5rem) 3rem;
+  }
+  .hero__edition {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    font-size: clamp(0.6rem, 0.9vw, 0.72rem);
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--ash);
+    margin-bottom: 0.8rem;
+  }
+  .hero__name {
+    text-align: center;
+    font-size: clamp(2.6rem, 11vw, 9.5rem);
+    line-height: 1;
+    margin-block: clamp(0.6rem, 2vw, 1.4rem);
+    font-weight: 900;
+  }
+  .hero__subtitle {
+    text-align: center;
+    font-size: clamp(0.66rem, 1.1vw, 0.92rem);
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--smoke);
+    margin-top: 0.9rem;
+  }
+  .hero__lead-grid {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: clamp(2rem, 11vw, 10rem);
+    align-items: center;
+    padding-top: clamp(1.2rem, 3vw, 2.2rem);
+    border-top: 1px solid var(--line);
+  }
+  .hero__feature {
+    margin: 0;
+    justify-self: end;
+  }
+  .hero__portrait-frame {
+    position: relative;
+    aspect-ratio: 4 / 5;
+    width: 100%;
+    max-width: 300px;
+    border: 1px solid var(--line-strong);
+    overflow: hidden;
+    filter: grayscale(1) contrast(1.05);
+  }
+  .hero__portrait-frame img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 1.2s var(--ease-snap);
+  }
+  .hero__portrait-frame:hover img {
+    transform: scale(1.05);
+  }
+  /* ASCII loupe overlay — transparent except the radius around the pointer. */
+  .hero__portrait-frame :global(.ascii-canvas) {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+  }
+  .hero__feature figcaption {
+    font-size: 0.66rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ash);
+    margin-top: 0.6rem;
+    max-width: 300px;
+    border-top: 1px solid var(--line);
+    padding-top: 0.5rem;
+  }
+  .hero__story {
+    display: flex;
+    flex-direction: column;
+  }
+  .hero__lead {
+    font-family: var(--font-serif);
+    font-size: clamp(1.15rem, 1.7vw, 1.55rem);
+    line-height: 1.4;
+    margin-top: 0.8rem;
+    max-width: 42ch;
+  }
+  .hero__lead em {
+    font-style: italic;
+    font-weight: 600;
+  }
+  .hero__actions {
+    display: flex;
+    align-items: center;
+    gap: clamp(1rem, 3vw, 2.5rem);
+    margin-top: clamp(1.4rem, 3vw, 2.2rem);
+    flex-wrap: wrap;
+  }
+  .hero__scroll {
+    align-self: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.6rem;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--ash);
+  }
+  .hero__scroll-line {
+    width: 1px;
+    height: 40px;
+    background: var(--line-strong);
+    transform-origin: top;
+    animation: scrolldrop 2s var(--ease-power) infinite;
+  }
+  @keyframes scrolldrop {
+    0% { transform: scaleY(0); }
+    50% { transform: scaleY(1); }
+    100% { transform: scaleY(0); transform-origin: bottom; }
+  }
+  @media (max-width: 820px) {
+    .hero__lead-grid {
+      grid-template-columns: 1fr;
+    }
+    .hero__feature {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .hero__portrait-frame,
+    .hero__feature figcaption {
+      max-width: 220px;
+    }
+    .hero__scroll {
+      display: none;
+    }
+  }
+</style>

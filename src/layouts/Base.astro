@@ -1,0 +1,186 @@
+---
+import '../styles/global.css';
+import Terminal from '../components/Terminal.astro';
+import { PERSON, SITE_URL, PROJECTS } from '../consts';
+
+interface Props {
+  title?: string;
+  description?: string;
+  /** Path-relative canonical, e.g. "/work/ori-lang". Defaults to current path. */
+  path?: string;
+  ogImage?: string;
+  type?: 'website' | 'profile' | 'article';
+  noIndex?: boolean;
+}
+
+const {
+  title = `${PERSON.name} — ${PERSON.role}`,
+  description = PERSON.metaDescription,
+  path = Astro.url.pathname,
+  ogImage = '/og.png',
+  type = 'website',
+  noIndex = false,
+} = Astro.props;
+
+const canonical = new URL(path, SITE_URL).href;
+const ogImageUrl = new URL(ogImage, SITE_URL).href;
+
+// Person + creative works JSON-LD (SSOT from consts).
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  '@id': `${SITE_URL}/#person`,
+  name: PERSON.name,
+  givenName: PERSON.firstName,
+  familyName: PERSON.lastName,
+  alternateName: PERSON.social.githubHandle,
+  url: SITE_URL,
+  jobTitle: PERSON.role,
+  description: PERSON.metaDescription,
+  image: ogImageUrl,
+  sameAs: [PERSON.social.github],
+  knowsAbout: [
+    'Artificial intelligence',
+    'AI tooling for code generation',
+    'Compiler design',
+    'Programming language design',
+    'Type systems',
+    'LLVM',
+    'Systems programming',
+    'Distributed systems',
+  ],
+  worksFor: {
+    '@type': 'Organization',
+    name: 'cloudlayer.io',
+    url: 'https://cloudlayer.io',
+  },
+  mainEntityOfPage: SITE_URL,
+};
+
+const worksLd = {
+  '@context': 'https://schema.org',
+  '@type': 'ItemList',
+  itemListElement: PROJECTS.map((p, i) => ({
+    '@type': 'ListItem',
+    position: i + 1,
+    item: {
+      '@type': 'SoftwareApplication',
+      name: p.name,
+      description: p.summary,
+      applicationCategory: p.category,
+      url: p.url ?? `${SITE_URL}/work/${p.slug}`,
+      author: { '@id': `${SITE_URL}/#person` },
+    },
+  })),
+};
+
+const siteLd = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  '@id': `${SITE_URL}/#website`,
+  url: SITE_URL,
+  name: PERSON.name,
+  description: PERSON.metaDescription,
+  inLanguage: 'en',
+  publisher: { '@id': `${SITE_URL}/#person` },
+  about: { '@id': `${SITE_URL}/#person` },
+};
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="generator" content={Astro.generator} />
+
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    {
+      noIndex ? (
+        <meta name="robots" content="noindex, nofollow" />
+      ) : (
+        <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+      )
+    }
+    <meta name="author" content={PERSON.name} />
+    <meta
+      name="keywords"
+      content="Eric Malamisura, world-leading AI expert, OriLang, Ori programming language, compiler engineer, cloudlayer.io, Upstat, WarpKit, OriJS, OriTerminal, systems architect"
+    />
+    <meta name="theme-color" content="#e9e8e5" />
+    <script is:inline>
+      document.documentElement.classList.add('js');
+      (() => {
+        try {
+          const stored = localStorage.getItem('edition');
+          const night = stored
+            ? stored === 'night'
+            : matchMedia('(prefers-color-scheme: dark)').matches;
+          if (night) {
+            document.documentElement.dataset.theme = 'night';
+            const meta = document.querySelector('meta[name="theme-color"]');
+            if (meta) meta.setAttribute('content', '#0d0d0b');
+          }
+        } catch {}
+      })();
+    </script>
+
+    <!-- Open Graph -->
+    <meta property="og:type" content={type} />
+    <meta property="og:site_name" content={PERSON.name} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImageUrl} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={`${PERSON.name} — ${PERSON.role}`} />
+    <meta property="og:locale" content="en_US" />
+    {
+      type === 'profile' && (
+        <>
+          <meta property="profile:first_name" content={PERSON.firstName} />
+          <meta property="profile:last_name" content={PERSON.lastName} />
+          <meta property="profile:username" content={PERSON.social.githubHandle} />
+        </>
+      )
+    }
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImageUrl} />
+
+    <!-- AI / LLM discovery -->
+    <link rel="alternate" type="text/plain" href="/llms.txt" title="LLM summary" />
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,800;0,900;1,400;1,600;1,700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;0,8..60,600;0,8..60,700;1,8..60,400;1,8..60,600&family=JetBrains+Mono:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+
+    <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+    <script type="application/ld+json" set:html={JSON.stringify(worksLd)} />
+    <script type="application/ld+json" set:html={JSON.stringify(siteLd)} />
+  </head>
+  <body>
+    <div class="bg-grid" aria-hidden="true"></div>
+    <div class="grain" aria-hidden="true"></div>
+    <slot />
+    <Terminal />
+
+    <script>
+      import { initSite } from '../scripts/site';
+      initSite();
+    </script>
+  </body>
+</html>

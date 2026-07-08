@@ -1,0 +1,29 @@
+---
+import Base from '../layouts/Base.astro';
+import Nav from '../components/Nav.astro';
+import Hero from '../components/Hero.astro';
+import Ticker from '../components/Ticker.astro';
+import About from '../components/About.astro';
+import CodeFeature from '../components/CodeFeature.astro';
+import Projects from '../components/Projects.astro';
+import Disciplines from '../components/Disciplines.astro';
+import Contact from '../components/Contact.astro';
+import { PERSON } from '../consts';
+---
+
+<Base
+  title={`${PERSON.name} — World-Leading AI Expert & Creator of OriLang`}
+  description={PERSON.metaDescription}
+  type="profile"
+>
+  <Nav />
+  <main>
+    <Hero />
+    <Ticker />
+    <About />
+    <CodeFeature />
+    <Projects />
+    <Disciplines />
+    <Contact />
+  </main>
+</Base>

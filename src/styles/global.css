@@ -1,0 +1,354 @@
+/* ============================================================
+   ERIC MALAMISURA — PORTFOLIO
+   Black & white editorial brutalism. Big type. Hard motion.
+   ============================================================ */
+
+:root {
+  /* LIGHT THEME. --ink = page/surface background, --paper = ink (text). */
+  --ink: #e9e8e5;
+  --void: #f2f1ef;
+  --paper: #0c0c0c;
+  --paper-pure: #000000;
+  --smoke: #45453f;
+  --ash: #76766e;
+  --faint: #e4e3dc;
+  --line: rgba(12, 12, 12, 0.16);
+  --line-strong: rgba(12, 12, 12, 0.42);
+  --grid-line: rgba(12, 12, 12, 0.05);
+  --grid-dot: rgba(12, 12, 12, 0.14);
+  --grid-size: 4.5rem;
+
+  --font-display: 'Playfair Display', 'Times New Roman', Georgia, serif;
+  --font-serif: 'Source Serif 4', Georgia, 'Times New Roman', serif;
+  --font-sans: 'Source Serif 4', Georgia, serif;
+  --font-mono: 'JetBrains Mono', 'IBM Plex Mono', ui-monospace, monospace;
+
+  --gutter: clamp(1.25rem, 4vw, 5rem);
+  --maxw: 1680px;
+
+  --ease-snap: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-power: cubic-bezier(0.76, 0, 0.24, 1);
+
+  color-scheme: light;
+}
+
+/* NIGHT EDITION. Inverted broadsheet: ink page, paper text. */
+:root[data-theme='night'] {
+  --ink: #0d0d0b;
+  --void: #060606;
+  --paper: #e8e6df;
+  --paper-pure: #ffffff;
+  --smoke: #b6b4aa;
+  --ash: #807f75;
+  --faint: #161613;
+  --line: rgba(232, 230, 223, 0.16);
+  --line-strong: rgba(232, 230, 223, 0.42);
+  --grid-line: rgba(232, 230, 223, 0.045);
+  --grid-dot: rgba(232, 230, 223, 0.13);
+
+  color-scheme: dark;
+}
+:root[data-theme='night'] .grain {
+  mix-blend-mode: screen;
+  opacity: 0.06;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  background: var(--ink);
+  color: var(--paper);
+  font-family: var(--font-serif);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  scroll-behavior: smooth;
+}
+
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+body {
+  background: transparent;
+  overflow-x: clip;
+  line-height: 1.2;
+  -webkit-tap-highlight-color: transparent;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+::selection {
+  background: var(--paper);
+  color: var(--ink);
+}
+
+/* ---------- Layout ---------- */
+.wrap {
+  width: 100%;
+  max-width: var(--maxw);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+section {
+  position: relative;
+}
+
+/* ---------- Type scale ---------- */
+.display {
+  font-family: var(--font-display);
+  font-weight: 800;
+  line-height: 0.98;
+  letter-spacing: -0.005em;
+}
+
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: clamp(0.65rem, 0.9vw, 0.76rem);
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--ash);
+  font-weight: 500;
+}
+
+.mono {
+  font-family: var(--font-mono);
+}
+
+/* Keep short phrases (e.g. "AI expert") from breaking across lines. */
+.nb {
+  white-space: nowrap;
+}
+
+/* ---------- Newspaper utilities ---------- */
+/* Hairline rule, broadsheet divider. */
+.rule {
+  border: none;
+  border-top: 1px solid var(--paper);
+  margin: 0;
+}
+.rule--thick {
+  border-top-width: 3px;
+}
+.rule--double {
+  border-top: 3px double var(--paper);
+}
+
+/* ---------- Grain overlay ---------- */
+.grain {
+  position: fixed;
+  inset: 0;
+  z-index: 9990;
+  pointer-events: none;
+  opacity: 0.045;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  animation: grain 0.5s steps(2) infinite;
+}
+@keyframes grain {
+  0% { transform: translate(0, 0); }
+  50% { transform: translate(-2%, 1%); }
+  100% { transform: translate(1%, -2%); }
+}
+
+/* ---------- Background textures ---------- */
+.bg-grid {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-color: var(--ink);
+  background-image:
+    linear-gradient(to right, var(--grid-line) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--grid-line) 1px, transparent 1px);
+  background-size: var(--grid-size) var(--grid-size);
+}
+/* Dotted intersections layered on the line grid for a technical, blueprint feel. */
+.bg-grid::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(var(--grid-dot) 1px, transparent 1.4px);
+  background-size: var(--grid-size) var(--grid-size);
+  background-position: calc(var(--grid-size) / -2) calc(var(--grid-size) / -2);
+  opacity: 0.5;
+  -webkit-mask-image: radial-gradient(ellipse 120% 80% at 50% 0%, #000 10%, transparent 70%);
+  mask-image: radial-gradient(ellipse 120% 80% at 50% 0%, #000 10%, transparent 70%);
+}
+
+/* ---------- Reveal animations (progressive enhancement) ----------
+   Hidden state applies ONLY when JS is active (html.js). With JS off
+   or broken, all content renders visible. */
+.line-mask {
+  display: block;
+  overflow: hidden;
+}
+html.js [data-reveal] {
+  opacity: 0;
+  transform: translateY(36px);
+  transition: opacity 0.9s var(--ease-snap), transform 0.9s var(--ease-snap);
+}
+html.js [data-reveal].is-in {
+  opacity: 1;
+  transform: none;
+}
+html.js .line-mask > span {
+  display: block;
+  transform: translateY(110%);
+  transition: transform 1s var(--ease-power);
+}
+html.js .is-in .line-mask > span,
+html.js .line-mask.is-in > span {
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  [data-reveal] {
+    opacity: 1;
+    transform: none;
+  }
+  .line-mask > span {
+    transform: none;
+  }
+}
+
+/* ---------- Buttons / links ---------- */
+.btn {
+  --pad: 1rem 2rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: var(--pad);
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  border: 1px solid var(--line-strong);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--paper);
+  position: relative;
+  overflow: hidden;
+  transition: color 0.5s var(--ease-snap);
+  isolation: isolate;
+}
+.btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--paper);
+  transform: translateY(101%);
+  transition: transform 0.5s var(--ease-power);
+  z-index: -1;
+}
+.btn:hover {
+  color: var(--ink);
+}
+.btn:hover::before {
+  transform: translateY(0);
+}
+
+.link-underline {
+  position: relative;
+  display: inline-block;
+}
+.link-underline::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -2px;
+  width: 100%;
+  height: 1px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.5s var(--ease-power);
+}
+.link-underline:hover::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+/* ---------- Custom cursor (terminal caret) ----------
+   Enabled by cursor.ts on fine pointers only (html.cursor-on). */
+@media (pointer: fine) {
+  html.js.cursor-on,
+  html.js.cursor-on * {
+    cursor: none;
+  }
+}
+.cursor-caret {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 10px;
+  height: 20px;
+  background: #fff;
+  mix-blend-mode: difference;
+  pointer-events: none;
+  z-index: 9999;
+  transform: translate(-50%, -50%);
+  transition:
+    width 0.25s var(--ease-snap),
+    height 0.25s var(--ease-snap),
+    background 0.25s var(--ease-snap),
+    outline-offset 0.25s var(--ease-snap);
+  animation: caret-blink 1.1s steps(2, jump-none) infinite;
+}
+.cursor-caret--hover {
+  width: 26px;
+  height: 26px;
+  background: transparent;
+  outline: 2px solid #fff;
+  outline-offset: 2px;
+  animation: none;
+}
+.cursor-caret--press {
+  width: 18px;
+  height: 18px;
+}
+.cursor-caret--idle {
+  visibility: hidden;
+}
+@keyframes caret-blink {
+  0%,
+  49% {
+    opacity: 1;
+  }
+  50%,
+  100% {
+    opacity: 0.25;
+  }
+}
+@media (pointer: coarse), (prefers-reduced-motion: reduce) {
+  .cursor-caret {
+    display: none;
+  }
+}
+

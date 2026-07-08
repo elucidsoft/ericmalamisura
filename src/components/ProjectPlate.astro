@@ -1,0 +1,177 @@
+---
+/**
+ * Deterministic engraved "printing plate" for a project — generative
+ * monochrome SVG seeded by slug, so every project has a stable, unique
+ * plate across cards and detail pages. Draws in currentColor.
+ */
+interface Props {
+  slug: string;
+  index: number;
+  class?: string;
+}
+const { slug, index, class: className = '' } = Astro.props;
+
+const W = 300;
+const H = 375;
+
+function hashStr(s: string): number {
+  let h = 2166136261;
+  for (const c of s) {
+    h ^= c.codePointAt(0) ?? 0;
+    h = Math.imul(h, 16777619);
+  }
+  return h >>> 0;
+}
+
+function mulberry32(a: number) {
+  return () => {
+    a |= 0;
+    a = (a + 0x6d2b79f5) | 0;
+    let t = Math.imul(a ^ (a >>> 15), 1 | a);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
+const rand = mulberry32(hashStr(slug));
+const pick = <T,>(arr: T[]): T => arr[Math.floor(rand() * arr.length)];
+
+/* ---- Motifs (each returns SVG markup drawn in currentColor) ---- */
+
+function rings(cx: number, cy: number, maxR: number): string {
+  const n = 6 + Math.floor(rand() * 6);
+  let out = '';
+  for (let i = 1; i <= n; i++) {
+    const r = (maxR / n) * i;
+    out += `<circle cx="${cx}" cy="${cy}" r="${r.toFixed(1)}" fill="none" stroke="currentColor" stroke-width="${(1.4 - i / n).toFixed(2)}"/>`;
+  }
+  return out;
+}
+
+function hatch(x: number, y: number, w: number, h: number, id: string): string {
+  const step = 6 + Math.floor(rand() * 5);
+  const slope = rand() > 0.5 ? 1 : -1;
+  let lines = '';
+  for (let o = -h; o < w + h; o += step) {
+    lines += `<line x1="${x + o}" y1="${y}" x2="${x + o + slope * h}" y2="${y + h}" stroke="currentColor" stroke-width="0.9"/>`;
+  }
+  return `<clipPath id="${id}"><rect x="${x}" y="${y}" width="${w}" height="${h}"/></clipPath><g clip-path="url(#${id})">${lines}</g><rect x="${x}" y="${y}" width="${w}" height="${h}" fill="none" stroke="currentColor" stroke-width="1.2"/>`;
+}
+
+function dotRamp(x: number, y: number, w: number, h: number): string {
+  const cell = 13;
+  const cols = Math.floor(w / cell);
+  const rows = Math.floor(h / cell);
+  let out = '';
+  for (let j = 0; j < rows; j++) {
+    for (let i = 0; i < cols; i++) {
+      const r = 0.7 + (j / rows) * 3.4;
+      out += `<circle cx="${x + i * cell + cell / 2}" cy="${y + j * cell + cell / 2}" r="${r.toFixed(1)}" fill="currentColor"/>`;
+    }
+  }
+  return out;
+}
+
+function barcode(x: number, y: number, w: number, h: number): string {
+  let out = '';
+  let cx = x;
+  while (cx < x + w) {
+    const bw = 1.5 + rand() * 7;
+    if (rand() > 0.35) {
+      out += `<rect x="${cx.toFixed(1)}" y="${y}" width="${bw.toFixed(1)}" height="${h}" fill="currentColor"/>`;
+    }
+    cx += bw + 2 + rand() * 5;
+  }
+  return out;
+}
+
+function chevrons(x: number, y: number, w: number, h: number): string {
+  const n = 5 + Math.floor(rand() * 4);
+  let out = '';
+  for (let i = 0; i < n; i++) {
+    const yy = y + (h / n) * i;
+    out += `<polyline points="${x},${yy + h / n} ${x + w / 2},${yy} ${x + w},${yy + h / n}" fill="none" stroke="currentColor" stroke-width="1.1"/>`;
+  }
+  return out;
+}
+
+/* ---- Compose the plate ---- */
+
+const uid = `pl-${slug}`;
+const motifKeys = ['rings', 'hatch', 'dots', 'bars', 'chevrons'] as const;
+const primary = motifKeys[hashStr(slug) % motifKeys.length];
+let secondary = pick(motifKeys.filter((m) => m !== primary));
+
+const M = 22; // margin inside the frame
+let art = '';
+
+switch (primary) {
+  case 'rings':
+    art += rings(W / 2, H * 0.42, W * 0.38);
+    break;
+  case 'hatch':
+    art += hatch(M + 8, M + 8, W - 2 * M - 16, H * 0.52, `${uid}-h`);
+    break;
+  case 'dots':
+    art += dotRamp(M + 6, M + 6, W - 2 * M - 12, H * 0.55);
+    break;
+  case 'bars':
+    art += barcode(M + 6, M + 10, W - 2 * M - 12, H * 0.5);
+    break;
+  case 'chevrons':
+    art += chevrons(M + 8, M + 10, W - 2 * M - 16, H * 0.5);
+    break;
+}
+
+const sy = H * 0.66;
+switch (secondary) {
+  case 'rings':
+    art += rings(W * 0.72, sy + 55, 48);
+    break;
+  case 'hatch':
+    art += hatch(M + 8, sy, W - 2 * M - 16, H * 0.22, `${uid}-h2`);
+    break;
+  case 'dots':
+    art += dotRamp(M + 6, sy, W - 2 * M - 12, H * 0.22);
+    break;
+  case 'bars':
+    art += barcode(M + 6, sy, W - 2 * M - 12, H * 0.2);
+    break;
+  case 'chevrons':
+    art += chevrons(M + 8, sy, W - 2 * M - 16, H * 0.2);
+    break;
+}
+
+// Registration marks + frame.
+const reg = (x: number, y: number) =>
+  `<g stroke="currentColor" stroke-width="1"><line x1="${x - 6}" y1="${y}" x2="${x + 6}" y2="${y}"/><line x1="${x}" y1="${y - 6}" x2="${x}" y2="${y + 6}"/><circle cx="${x}" cy="${y}" r="3.4" fill="none"/></g>`;
+
+const plateNo = `PL. ${String(index + 1).padStart(2, '0')}`;
+
+const svg = `
+<rect x="4" y="4" width="${W - 8}" height="${H - 8}" fill="none" stroke="currentColor" stroke-width="1.4"/>
+<rect x="${M - 8}" y="${M - 8}" width="${W - 2 * M + 16}" height="${H - 2 * M + 16}" fill="none" stroke="currentColor" stroke-width="0.6"/>
+${art}
+${reg(M, H - M)}
+${reg(W - M, H - M)}
+<text x="${W / 2}" y="${H - M + 4}" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="10" letter-spacing="3" fill="currentColor">${plateNo}</text>
+`;
+---
+
+<svg
+  class={`plate ${className}`}
+  viewBox={`0 0 ${W} ${H}`}
+  role="img"
+  aria-label={`Engraved plate ${plateNo} for ${slug}`}
+  set:html={svg}
+/>
+
+<style>
+  .plate {
+    display: block;
+    width: 100%;
+    height: auto;
+    color: var(--paper);
+    opacity: 0.9;
+  }
+</style>

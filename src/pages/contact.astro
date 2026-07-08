@@ -1,0 +1,221 @@
+---
+import Base from '../layouts/Base.astro';
+import Nav from '../components/Nav.astro';
+import { PERSON, SITE_URL } from '../consts';
+
+const contactLd = {
+  '@context': 'https://schema.org',
+  '@type': 'ContactPage',
+  url: `${SITE_URL}/contact`,
+  name: `Contact ${PERSON.name}`,
+  about: { '@id': `${SITE_URL}/#person` },
+};
+---
+
+<Base
+  title={`Contact — ${PERSON.name}`}
+  description={`Write to ${PERSON.name} — world-leading AI expert and creator of OriLang. Letters to the editor, forwarded directly.`}
+  path="/contact"
+>
+  <Nav />
+  <main class="letters">
+    <article class="wrap">
+      <header class="letters__head">
+        <span class="eyebrow" data-reveal>Letters to the Editor</span>
+        <h1 class="letters__title display" data-reveal>Write to Eric.</h1>
+        <p class="letters__lead" data-reveal>
+          No address is printed in this paper — the mailroom forwards every
+          letter directly. Expect a reply from the editor's desk.
+        </p>
+      </header>
+
+      <div class="letters__grid">
+        <form
+          class="letters__form"
+          data-contact-form
+          action={PERSON.contact.endpoint}
+          method="POST"
+          data-reveal
+        >
+          <input type="hidden" name="access_key" value={PERSON.contact.web3formsKey} />
+          <input type="hidden" name="subject" value={`Letter from ${SITE_URL}`} />
+          <input type="hidden" name="redirect" value={`${SITE_URL}/contact/?sent=1`} />
+          <input
+            type="checkbox"
+            name="botcheck"
+            class="letters__botcheck"
+            tabindex="-1"
+            autocomplete="off"
+            aria-hidden="true"
+          />
+
+          <div class="letters__field">
+            <label for="letter-name" class="mono">Your name</label>
+            <input id="letter-name" name="name" type="text" required autocomplete="name" />
+          </div>
+
+          <div class="letters__field">
+            <label for="letter-email" class="mono">Your email — for the reply</label>
+            <input id="letter-email" name="email" type="email" required autocomplete="email" />
+          </div>
+
+          <div class="letters__field">
+            <label for="letter-message" class="mono">The letter</label>
+            <textarea id="letter-message" name="message" rows="8" required></textarea>
+          </div>
+
+          <div class="letters__actions">
+            <button type="submit" class="btn hover-target" data-magnetic="0.3">
+              Post the letter
+            </button>
+            <p class="letters__status mono" data-form-status aria-live="polite"></p>
+          </div>
+        </form>
+
+        <aside class="letters__aside" data-reveal>
+          <h2 class="mono letters__aside-head">// Other channels</h2>
+          <ul class="letters__channels">
+            <li>
+              <a href={PERSON.social.github} class="mono link-underline hover-target" rel="me noopener" target="_blank">
+                GitHub — {PERSON.social.githubHandle}
+              </a>
+            </li>
+            <li>
+              <button type="button" class="mono link-underline hover-target letters__tty" data-terminal-open>
+                The terminal — try `contact`
+              </button>
+            </li>
+          </ul>
+          <p class="letters__note">
+            Reporting an issue with one of the products? Each site in
+            circulation has its own support desk — this desk covers the
+            body of work.
+          </p>
+        </aside>
+      </div>
+    </article>
+  </main>
+
+  <script type="application/ld+json" set:html={JSON.stringify(contactLd)} />
+</Base>
+
+<style>
+  .letters {
+    padding-top: clamp(7rem, 16vh, 12rem);
+    padding-bottom: clamp(4rem, 10vh, 8rem);
+  }
+  .letters__head {
+    border-bottom: 1px solid var(--line);
+    padding-bottom: clamp(1.5rem, 4vw, 3rem);
+  }
+  .letters__title {
+    font-size: clamp(2.6rem, 7vw, 6rem);
+    line-height: 0.95;
+    margin-block: 1.2rem;
+  }
+  .letters__lead {
+    font-size: clamp(1.05rem, 1.6vw, 1.4rem);
+    line-height: 1.5;
+    color: var(--smoke);
+    max-width: 46ch;
+  }
+  .letters__grid {
+    display: grid;
+    grid-template-columns: 1.5fr 0.9fr;
+    gap: clamp(2rem, 6vw, 6rem);
+    margin-top: clamp(2.5rem, 6vw, 4.5rem);
+  }
+  .letters__form {
+    display: grid;
+    gap: clamp(1.5rem, 3vw, 2.2rem);
+  }
+  .letters__botcheck {
+    position: absolute;
+    left: -9999px;
+    opacity: 0;
+  }
+  .letters__field {
+    display: grid;
+    gap: 0.6rem;
+  }
+  .letters__field label {
+    font-size: 0.68rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--ash);
+  }
+  .letters__field input,
+  .letters__field textarea {
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid var(--line-strong);
+    padding: 0.6rem 0;
+    font-family: var(--font-serif);
+    font-size: clamp(1.05rem, 1.4vw, 1.3rem);
+    color: var(--paper);
+    border-radius: 0;
+    resize: vertical;
+  }
+  .letters__field input:focus,
+  .letters__field textarea:focus {
+    outline: none;
+    border-bottom-color: var(--paper);
+  }
+  .letters__actions {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+  }
+  .letters__status {
+    font-size: 0.74rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--smoke);
+  }
+  .letters__aside {
+    display: flex;
+    flex-direction: column;
+    gap: 1.4rem;
+    border-left: 1px solid var(--line);
+    padding-left: clamp(1.2rem, 2.5vw, 2.5rem);
+    align-self: start;
+  }
+  .letters__aside-head {
+    font-size: 0.8rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ash);
+  }
+  .letters__channels {
+    list-style: none;
+    display: grid;
+    gap: 0.9rem;
+    font-size: 0.85rem;
+    letter-spacing: 0.08em;
+  }
+  .letters__tty {
+    background: transparent;
+    border: none;
+    color: inherit;
+    font-size: inherit;
+    letter-spacing: inherit;
+    padding: 0;
+  }
+  .letters__note {
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: var(--smoke);
+  }
+  @media (max-width: 880px) {
+    .letters__grid {
+      grid-template-columns: 1fr;
+    }
+    .letters__aside {
+      border-left: none;
+      padding-left: 0;
+      border-top: 1px solid var(--line);
+      padding-top: 1.5rem;
+    }
+  }
+</style>

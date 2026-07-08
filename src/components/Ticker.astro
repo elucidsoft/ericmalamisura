@@ -1,0 +1,67 @@
+---
+import { PROJECTS, PERSON } from '../consts';
+
+/** Wire-service ticker — every item is a real fact from consts.ts. */
+const items = [
+  `THE WIRE — ${PERSON.location.toUpperCase()}`,
+  ...PROJECTS.map((p) => `${p.name.toUpperCase()}: ${p.status.toUpperCase()} (${p.year})`),
+  PERSON.tagline.toUpperCase(),
+  'PRESS ` FOR THE TERMINAL',
+];
+---
+
+<div class="ticker" aria-label="Latest from the wire">
+  <div class="ticker__belt" aria-hidden="false">
+    <ul class="ticker__list">
+      {items.map((item) => <li class="ticker__item mono">{item}</li>)}
+    </ul>
+    <ul class="ticker__list" aria-hidden="true">
+      {items.map((item) => <li class="ticker__item mono">{item}</li>)}
+    </ul>
+  </div>
+</div>
+
+<style>
+  .ticker {
+    border-top: 1px solid var(--paper);
+    border-bottom: 1px solid var(--paper);
+    overflow: hidden;
+    background: color-mix(in srgb, var(--paper) 4%, transparent);
+  }
+  .ticker__belt {
+    display: flex;
+    width: max-content;
+    animation: ticker-roll 42s linear infinite;
+  }
+  .ticker:hover .ticker__belt {
+    animation-play-state: paused;
+  }
+  .ticker__list {
+    list-style: none;
+    display: flex;
+    flex-shrink: 0;
+  }
+  .ticker__item {
+    padding: 0.55rem 0;
+    font-size: 0.64rem;
+    letter-spacing: 0.22em;
+    white-space: nowrap;
+    color: var(--smoke);
+  }
+  .ticker__item::after {
+    content: '///';
+    color: var(--ash);
+    margin-inline: 1.6rem;
+    letter-spacing: 0;
+  }
+  @keyframes ticker-roll {
+    to {
+      transform: translateX(-50%);
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .ticker__belt {
+      animation: none;
+    }
+  }
+</style>

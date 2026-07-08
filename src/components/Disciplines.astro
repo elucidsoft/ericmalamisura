@@ -1,0 +1,51 @@
+---
+import { DISCIPLINES } from '../consts';
+import { bindAI } from '../utils';
+---
+
+<section class="disc" id="disciplines">
+  <div class="wrap">
+    <span class="eyebrow" data-reveal>(04) — The Craft</span>
+    <ul class="disc__list">
+      {
+        DISCIPLINES.map((d, i) => (
+          <li class="disc__item" data-reveal style={`transition-delay:${i * 50}ms`}>
+            <span class="disc__num mono">{String(i + 1).padStart(2, '0')}</span>
+            <span class="disc__label display">{bindAI(d)}</span>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>
+
+<style>
+  .disc {
+    padding-block: clamp(4rem, 10vh, 9rem);
+    border-top: 1px solid var(--line);
+  }
+  .disc__list {
+    list-style: none;
+    margin-top: clamp(2rem, 5vw, 4rem);
+  }
+  .disc__item {
+    display: flex;
+    align-items: center;
+    gap: clamp(1rem, 4vw, 3rem);
+    border-top: 1px solid var(--line);
+    padding-block: clamp(0.6rem, 1.6vw, 1.1rem);
+  }
+  .disc__item:last-child {
+    border-bottom: 1px solid var(--line);
+  }
+  .disc__num {
+    font-size: 0.8rem;
+    color: var(--ash);
+    width: 2.5rem;
+    flex-shrink: 0;
+  }
+  .disc__label {
+    font-size: clamp(1.3rem, 3vw, 2.2rem);
+    line-height: 1.05;
+  }
+</style>

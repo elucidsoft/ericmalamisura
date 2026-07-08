@@ -1,0 +1,235 @@
+---
+import { CODE_SHOWCASE } from '../consts';
+
+/**
+ * Build-time OriLang highlighter — monochrome typographic tokens
+ * (weight/style/tone), no color, in keeping with the broadsheet.
+ */
+const esc = (s: string) =>
+  s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+
+const RULES: { re: RegExp; cls: string }[] = [
+  { re: /\/\/[^\n]*/y, cls: 'tok-cmt' },
+  { re: /"(?:[^"\\]|\\.)*"/y, cls: 'tok-str' },
+  { re: /@[A-Za-z_][A-Za-z0-9_]*/y, cls: 'tok-fn' },
+  { re: /\b(?:use|type|trait|impl|match|tests|let|if|else|for|in|return)\b/y, cls: 'tok-kw' },
+  { re: /\b(?:int|float|str|bool|void)\b/y, cls: 'tok-prim' },
+  { re: /\b[A-Z][A-Za-z0-9_]*\b/y, cls: 'tok-type' },
+  { re: /\b\d[\d_]*(?:\.\d+)?\b/y, cls: 'tok-num' },
+  { re: /\s+/y, cls: '' },
+  { re: /[A-Za-z_][A-Za-z0-9_]*/y, cls: '' },
+];
+
+function highlight(src: string): string {
+  let out = '';
+  let i = 0;
+  while (i < src.length) {
+    let matched = false;
+    for (const rule of RULES) {
+      rule.re.lastIndex = i;
+      const m = rule.re.exec(src);
+      if (m && m.index === i && m[0]) {
+        out += rule.cls ? `<span class="${rule.cls}">${esc(m[0])}</span>` : esc(m[0]);
+        i += m[0].length;
+        matched = true;
+        break;
+      }
+    }
+    if (!matched) {
+      out += esc(src[i]);
+      i++;
+    }
+  }
+  return out;
+}
+
+const highlighted = highlight(CODE_SHOWCASE.code);
+---
+
+<section class="codefeat" id="language">
+  <div class="wrap codefeat__grid">
+    <div class="codefeat__story">
+      <span class="eyebrow" data-reveal>(02) — The Language</span>
+      <h2 class="codefeat__title display" data-reveal>
+        If it compiles,<br />it's tested.
+      </h2>
+      <p class="codefeat__lead" data-reveal>
+        This is {CODE_SHOWCASE.language}. Testing is not a library — it is a
+        language keyword, enforced by the compiler. Whole-program type
+        inference, value semantics with automatic reference counting, and
+        native binaries through LLVM.
+      </p>
+      <ul class="codefeat__facts" data-reveal>
+        <li><span class="mono">01</span> Hindley–Milner inference — whole program</li>
+        <li><span class="mono">02</span> ARC + value semantics — no GC, no borrow checker</li>
+        <li><span class="mono">03</span> `tests` is a keyword — untested code won't compile</li>
+        <li><span class="mono">04</span> LLVM native binaries — Windows, Linux, macOS</li>
+      </ul>
+      <a href="/work/ori-lang" class="btn hover-target" data-magnetic="0.3" data-reveal>
+        Read the OriLang story
+      </a>
+    </div>
+
+    <figure class="codefeat__plate" data-reveal>
+      <div class="codefeat__editor" data-typer>
+        <div class="codefeat__bar mono">
+          <span>shape.ori</span>
+          <span class="codefeat__bar-right">ori test</span>
+        </div>
+        <pre class="codefeat__pre"><code class="mono" set:html={highlighted} /></pre>
+        <div class="codefeat__run mono">
+          <span class="codefeat__out" data-typer-out>$ ori test shape.ori</span>
+          <span class="codefeat__out codefeat__out--verdict" data-typer-out
+            >{CODE_SHOWCASE.verdict}</span
+          >
+        </div>
+      </div>
+      <figcaption class="mono">Fig. 02 — {CODE_SHOWCASE.provenance}</figcaption>
+    </figure>
+  </div>
+</section>
+
+<style>
+  .codefeat {
+    padding-block: clamp(4rem, 10vh, 9rem);
+    border-top: 1px solid var(--line);
+  }
+  .codefeat__grid {
+    display: grid;
+    grid-template-columns: 0.9fr 1.1fr;
+    gap: clamp(2rem, 6vw, 6rem);
+    align-items: center;
+  }
+  .codefeat__title {
+    font-size: clamp(2.2rem, 5vw, 4.2rem);
+    margin-block: 1.4rem;
+  }
+  .codefeat__lead {
+    font-size: clamp(1rem, 1.35vw, 1.25rem);
+    line-height: 1.6;
+    color: var(--smoke);
+    max-width: 46ch;
+  }
+  .codefeat__facts {
+    list-style: none;
+    margin-block: clamp(1.4rem, 3vw, 2.2rem);
+  }
+  .codefeat__facts li {
+    display: flex;
+    gap: 1rem;
+    align-items: baseline;
+    border-top: 1px solid var(--line);
+    padding-block: 0.6rem;
+    font-size: clamp(0.92rem, 1.15vw, 1.05rem);
+  }
+  .codefeat__facts .mono {
+    font-size: 0.7rem;
+    color: var(--ash);
+  }
+  .codefeat__plate {
+    margin: 0;
+    min-width: 0;
+  }
+  .codefeat__editor {
+    border: 1px solid var(--line-strong);
+    background: color-mix(in srgb, var(--paper) 3%, transparent);
+  }
+  .codefeat__bar {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.55rem 1rem;
+    border-bottom: 1px solid var(--line);
+    font-size: 0.64rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ash);
+  }
+  .codefeat__pre {
+    padding: clamp(1rem, 2.5vw, 1.6rem);
+    overflow-x: auto;
+    font-size: clamp(0.7rem, 1.55vw, 0.85rem);
+    line-height: 1.75;
+  }
+  .codefeat__pre code {
+    color: var(--paper);
+  }
+  /* Monochrome token treatment — hierarchy by weight and tone, not hue. */
+  .codefeat__pre :global(.tok-cmt) {
+    color: var(--ash);
+    font-style: italic;
+  }
+  .codefeat__pre :global(.tok-kw) {
+    font-weight: 700;
+  }
+  .codefeat__pre :global(.tok-fn) {
+    font-weight: 600;
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 3px;
+  }
+  .codefeat__pre :global(.tok-type) {
+    font-style: italic;
+  }
+  .codefeat__pre :global(.tok-prim) {
+    color: var(--smoke);
+  }
+  .codefeat__pre :global(.tok-str),
+  .codefeat__pre :global(.tok-num) {
+    color: var(--smoke);
+  }
+  .codefeat__run {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    padding: 0.8rem 1rem;
+    border-top: 1px solid var(--line);
+    font-size: 0.74rem;
+  }
+  .codefeat__out {
+    color: var(--ash);
+  }
+  .codefeat__out--verdict {
+    color: var(--paper);
+    font-weight: 600;
+  }
+  .codefeat__plate figcaption {
+    font-size: 0.66rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ash);
+    margin-top: 0.6rem;
+    border-top: 1px solid var(--line);
+    padding-top: 0.5rem;
+  }
+  /* Typewriter states (spans injected at runtime by typewriter.ts). */
+  .codefeat :global(.tw-armed .tw-char) {
+    visibility: hidden;
+  }
+  .codefeat :global([data-typer-out]) {
+    transition:
+      opacity 0.4s var(--ease-snap),
+      transform 0.4s var(--ease-snap);
+  }
+  .codefeat :global(.tw-armed [data-typer-out]) {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  .codefeat :global(.tw-armed [data-typer-out].is-typed) {
+    opacity: 1;
+    transform: none;
+  }
+  .codefeat :global(.tw-caret) {
+    display: inline-block;
+    width: 0.55em;
+    height: 1.1em;
+    background: var(--paper);
+    vertical-align: text-bottom;
+    animation: caret-blink 1s steps(2, jump-none) infinite;
+  }
+  @media (max-width: 980px) {
+    .codefeat__grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

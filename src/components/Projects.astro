@@ -1,0 +1,45 @@
+---
+import { PROJECTS } from '../consts';
+import ProjectCard from './ProjectCard.astro';
+---
+
+<section class="work" id="work">
+  <div class="wrap">
+    <div class="work__head">
+      <span class="eyebrow" data-reveal>(03) — Selected Work</span>
+      <h2 class="work__title display" data-reveal>Six things,<br />built from scratch.</h2>
+      <p class="work__intro" data-reveal>
+        A programming language. A compiler. A GPU terminal. Two production SaaS
+        platforms. The frameworks underneath them. Each one shipped end to end.
+      </p>
+    </div>
+
+    <div class="work__list">
+      {PROJECTS.map((project, i) => <ProjectCard project={project} index={i} />)}
+    </div>
+  </div>
+</section>
+
+<style>
+  .work {
+    padding-block: clamp(4rem, 10vh, 9rem);
+    border-top: 1px solid var(--line);
+  }
+  .work__head {
+    display: grid;
+    gap: 1.5rem;
+    margin-bottom: clamp(2rem, 5vw, 4rem);
+  }
+  .work__title {
+    font-size: clamp(2rem, 4.5vw, 3.6rem);
+  }
+  .work__intro {
+    font-size: clamp(1rem, 1.4vw, 1.3rem);
+    line-height: 1.5;
+    color: var(--smoke);
+    max-width: 52ch;
+  }
+  .work__list {
+    border-bottom: 1px solid var(--line);
+  }
+</style>

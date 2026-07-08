@@ -1,0 +1,166 @@
+---
+import { PERSON, PROJECTS, DISCIPLINES, SITE_URL } from '../consts';
+
+/** Data island consumed by scripts/terminal.ts — SSOT stays consts.ts. */
+const termData = {
+  person: {
+    name: PERSON.name,
+    role: PERSON.role,
+    github: PERSON.social.github,
+    location: PERSON.location,
+    tagline: PERSON.tagline,
+  },
+  projects: PROJECTS.map((p) => ({
+    slug: p.slug,
+    name: p.name,
+    category: p.category,
+    status: p.status,
+    year: p.year,
+    tagline: p.tagline,
+    url: p.url,
+  })),
+  disciplines: DISCIPLINES,
+  site: SITE_URL,
+};
+---
+
+<div class="term" id="site-terminal" role="dialog" aria-modal="true" aria-label="Site terminal" hidden>
+  <div class="term__panel">
+    <div class="term__bar mono">
+      <span class="term__dot" aria-hidden="true"></span>
+      <span class="term__title">guest@ericmalamisura — tty01</span>
+      <span class="term__hint">ESC closes · ` toggles</span>
+      <button type="button" class="term__close mono hover-target" data-terminal-close aria-label="Close terminal">✕</button>
+    </div>
+    <div class="term__screen mono" data-terminal-screen></div>
+    <form class="term__promptline" data-terminal-form>
+      <label class="term__ps1 mono" for="term-input">guest:~$</label>
+      <input
+        id="term-input"
+        class="term__input mono"
+        data-terminal-input
+        autocomplete="off"
+        autocapitalize="off"
+        spellcheck="false"
+        aria-label="Terminal command input"
+      />
+    </form>
+  </div>
+</div>
+<script type="application/json" id="terminal-data" set:html={JSON.stringify(termData)} />
+
+<style>
+  .term {
+    position: fixed;
+    inset: 0;
+    z-index: 9500;
+    background: color-mix(in srgb, var(--void) 55%, transparent);
+    backdrop-filter: blur(3px);
+    opacity: 0;
+    transition: opacity 0.3s var(--ease-snap);
+  }
+  .term.term--open {
+    opacity: 1;
+  }
+  .term__panel {
+    display: flex;
+    flex-direction: column;
+    max-height: min(34rem, 72vh);
+    background: var(--ink);
+    border-bottom: 3px double var(--paper);
+    transform: translateY(-101%);
+    transition: transform 0.35s var(--ease-power);
+  }
+  .term--open .term__panel {
+    transform: none;
+  }
+  .term__bar {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.6rem var(--gutter);
+    border-bottom: 1px solid var(--line);
+    font-size: 0.66rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ash);
+  }
+  .term__dot {
+    width: 8px;
+    height: 8px;
+    background: var(--paper);
+    animation: term-pulse 1.6s steps(2, jump-none) infinite;
+  }
+  @keyframes term-pulse {
+    50% {
+      opacity: 0.25;
+    }
+  }
+  .term__title {
+    color: var(--paper);
+  }
+  .term__hint {
+    margin-left: auto;
+  }
+  .term__close {
+    background: transparent;
+    border: 1px solid var(--line-strong);
+    color: var(--paper);
+    padding: 0.15rem 0.5rem;
+    font-size: 0.7rem;
+  }
+  .term__close:hover {
+    background: var(--paper);
+    color: var(--ink);
+  }
+  .term__screen {
+    overflow-y: auto;
+    padding: 1rem var(--gutter);
+    min-height: 10rem;
+    font-size: 0.82rem;
+    line-height: 1.7;
+  }
+  .term__screen :global(.term__line) {
+    white-space: pre-wrap;
+    word-break: break-word;
+    color: var(--paper);
+  }
+  .term__screen :global(.term__line--head) {
+    font-weight: 600;
+    letter-spacing: 0.1em;
+  }
+  .term__screen :global(.term__line--dim) {
+    color: var(--ash);
+  }
+  .term__screen :global(.term__line--cmd) {
+    color: var(--smoke);
+    margin-top: 0.5em;
+  }
+  .term__screen :global(.term__line--err) {
+    color: var(--paper);
+    text-decoration: underline;
+    text-decoration-style: wavy;
+    text-underline-offset: 3px;
+  }
+  .term__promptline {
+    display: flex;
+    align-items: baseline;
+    gap: 0.6rem;
+    padding: 0.7rem var(--gutter) 0.9rem;
+    border-top: 1px solid var(--line);
+  }
+  .term__ps1 {
+    font-size: 0.82rem;
+    color: var(--ash);
+    flex-shrink: 0;
+  }
+  .term__input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: var(--paper);
+    font-size: 0.82rem;
+    caret-shape: block;
+  }
+</style>

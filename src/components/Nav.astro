@@ -1,0 +1,135 @@
+---
+import { NAV_LINKS, PERSON } from '../consts';
+---
+
+<header class="nav">
+  <div class="nav__inner wrap">
+    <a href="/" class="nav__brand mono hover-target" aria-label={`${PERSON.name} — home`}>
+      <span class="nav__mark">EM</span>
+      <span class="nav__name">{PERSON.name}</span>
+    </a>
+    <nav class="nav__links" aria-label="Primary">
+      {
+        NAV_LINKS.map((l) => (
+          <a href={l.href} class="nav__link mono" data-scramble>
+            {l.label}
+          </a>
+        ))
+      }
+    </nav>
+    <div class="nav__tools">
+      <button
+        type="button"
+        class="nav__tool mono hover-target"
+        data-terminal-open
+        aria-label="Open terminal (or press backtick)"
+        title="Open terminal — press `"
+      >
+        <span aria-hidden="true">&gt;_</span>
+      </button>
+      <button
+        type="button"
+        class="nav__tool nav__tool--theme mono hover-target"
+        data-theme-toggle
+        aria-label="Switch between day and night edition"
+      >
+        <span class="nav__tool-night" aria-hidden="true">Night&nbsp;Ed.</span>
+        <span class="nav__tool-day" aria-hidden="true">Day&nbsp;Ed.</span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<style>
+  .nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+    padding-block: clamp(0.9rem, 1.8vw, 1.4rem);
+    background: color-mix(in srgb, var(--ink) 90%, transparent);
+    backdrop-filter: blur(12px) saturate(1.2);
+    border-bottom: 1px solid var(--line-strong);
+  }
+  .nav__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2rem;
+  }
+  .nav__brand {
+    display: flex;
+    align-items: baseline;
+    gap: 0.7rem;
+    font-weight: 600;
+    color: var(--paper);
+  }
+  .nav__mark {
+    font-family: var(--font-display);
+    font-size: 1.3rem;
+    letter-spacing: 0.04em;
+  }
+  .nav__name {
+    font-size: 0.74rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+  }
+  .nav__links {
+    display: flex;
+    gap: clamp(1.2rem, 2.5vw, 2.6rem);
+    margin-left: auto;
+  }
+  .nav__tools {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+  .nav__tool {
+    font-size: 0.68rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--paper);
+    background: transparent;
+    border: 1px solid var(--line-strong);
+    padding: 0.42rem 0.75rem;
+    transition:
+      background 0.25s var(--ease-snap),
+      color 0.25s var(--ease-snap);
+  }
+  .nav__tool:hover {
+    background: var(--paper);
+    color: var(--ink);
+  }
+  /* Toggle label flips with the active edition. */
+  .nav__tool-day {
+    display: none;
+  }
+  :global(html[data-theme='night']) .nav__tool-day {
+    display: inline;
+  }
+  :global(html[data-theme='night']) .nav__tool-night {
+    display: none;
+  }
+  .nav__link {
+    font-size: 0.74rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--paper);
+  }
+  @media (max-width: 720px) {
+    .nav__name {
+      display: none;
+    }
+    .nav__links {
+      gap: 0.8rem;
+    }
+    .nav__inner {
+      gap: 0.8rem;
+    }
+    .nav__tool {
+      padding: 0.35rem 0.5rem;
+      letter-spacing: 0.08em;
+    }
+  }
+</style>

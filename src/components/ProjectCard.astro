@@ -1,0 +1,169 @@
+---
+import type { Project } from '../consts';
+import ProjectPlate from './ProjectPlate.astro';
+import { bindAI } from '../utils';
+interface Props {
+  project: Project;
+  index: number;
+}
+const { project, index } = Astro.props;
+const num = String(index + 1).padStart(2, '0');
+---
+
+<article class={`pcard hover-target ${project.flagship ? 'pcard--flagship' : ''}`} data-reveal>
+  <a href={`/work/${project.slug}`} class="pcard__link" aria-label={`${project.name} — ${project.tagline}`}>
+    <div class="pcard__byline mono">
+      <span class="pcard__num">No. {num}</span>
+      <span>{project.category}</span>
+      <span>{project.year}</span>
+      {project.flagship && <span class="pcard__flag">★ Flagship</span>}
+    </div>
+
+    <div class="pcard__grid">
+      <div class="pcard__body">
+        <h3 class="pcard__name display">{project.name}</h3>
+        <p class="pcard__tagline">{project.tagline}</p>
+        <p class="pcard__standfirst">{bindAI(project.summary)}</p>
+
+        <div class="pcard__foot">
+          <ul class="pcard__stack">
+            {project.stack.slice(0, 4).map((s) => <li class="mono">{s}</li>)}
+          </ul>
+          <span class="pcard__go mono">
+            Explore {project.name} <span class="pcard__arrow">→</span>
+          </span>
+        </div>
+      </div>
+      <div class="pcard__plate" aria-hidden="true">
+        <ProjectPlate slug={project.slug} index={index} />
+      </div>
+    </div>
+  </a>
+</article>
+
+<style>
+  .pcard {
+    border-top: 1px solid var(--paper);
+    position: relative;
+    transition: background 0.5s var(--ease-snap);
+  }
+  .pcard:hover {
+    background: color-mix(in srgb, var(--paper) 4%, transparent);
+  }
+  .pcard__link {
+    display: block;
+    padding-block: clamp(1.4rem, 3vw, 2.4rem);
+  }
+  .pcard__grid {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: clamp(1.5rem, 4vw, 4rem);
+    align-items: center;
+  }
+  .pcard__plate {
+    width: clamp(96px, 11vw, 150px);
+    transition:
+      transform 0.6s var(--ease-snap),
+      opacity 0.6s var(--ease-snap);
+    opacity: 0.55;
+  }
+  .pcard--flagship .pcard__plate {
+    width: clamp(120px, 13vw, 180px);
+  }
+  .pcard:hover .pcard__plate {
+    opacity: 1;
+    transform: rotate(-2deg) scale(1.04);
+  }
+  @media (max-width: 640px) {
+    .pcard__plate {
+      display: none;
+    }
+  }
+  .pcard__byline {
+    display: flex;
+    align-items: center;
+    gap: 1.2rem;
+    margin-bottom: clamp(0.7rem, 1.5vw, 1.1rem);
+    font-size: 0.66rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--ash);
+    flex-wrap: wrap;
+  }
+  .pcard__num {
+    color: var(--paper);
+  }
+  .pcard__flag {
+    margin-left: auto;
+    color: var(--paper);
+  }
+  .pcard__name {
+    font-size: clamp(1.8rem, 3.8vw, 3.1rem);
+    font-weight: 800;
+    line-height: 1;
+    color: var(--paper);
+    transition: transform 0.5s var(--ease-snap);
+  }
+  .pcard--flagship .pcard__name {
+    font-size: clamp(2.1rem, 4.6vw, 3.8rem);
+  }
+  .pcard:hover .pcard__name {
+    transform: translateX(clamp(0.3rem, 1vw, 0.9rem));
+  }
+  .pcard__tagline {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: clamp(1.05rem, 1.5vw, 1.4rem);
+    line-height: 1.3;
+    color: var(--paper);
+    margin-top: 0.55rem;
+    max-width: 44ch;
+  }
+  .pcard__standfirst {
+    font-family: var(--font-serif);
+    font-size: clamp(0.95rem, 1.15vw, 1.1rem);
+    line-height: 1.55;
+    color: var(--smoke);
+    margin-top: 0.8rem;
+    max-width: 64ch;
+  }
+  .pcard__foot {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    margin-top: clamp(1.2rem, 2.5vw, 1.8rem);
+    flex-wrap: wrap;
+  }
+  .pcard__stack {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.45rem;
+  }
+  .pcard__stack li {
+    font-size: 0.62rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--smoke);
+    border: 1px solid var(--line-strong);
+    border-radius: 999px;
+    padding: 0.28rem 0.7rem;
+  }
+  .pcard__go {
+    font-size: 0.74rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: var(--paper);
+    display: inline-flex;
+    gap: 0.6rem;
+    white-space: nowrap;
+  }
+  .pcard__arrow {
+    transition: transform 0.5s var(--ease-power);
+  }
+  .pcard:hover .pcard__arrow {
+    transform: translateX(0.5rem);
+  }
+</style>

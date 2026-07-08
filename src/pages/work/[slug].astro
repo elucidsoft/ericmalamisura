@@ -1,0 +1,279 @@
+---
+import Base from '../../layouts/Base.astro';
+import Nav from '../../components/Nav.astro';
+import ProjectPlate from '../../components/ProjectPlate.astro';
+import { PROJECTS, PERSON, SITE_URL } from '../../consts';
+
+export function getStaticPaths() {
+  return PROJECTS.map((project, index) => ({
+    params: { slug: project.slug },
+    props: { project, index },
+  }));
+}
+
+const { project, index } = Astro.props;
+const num = String(index + 1).padStart(2, '0');
+
+const prev = PROJECTS[(index - 1 + PROJECTS.length) % PROJECTS.length];
+const next = PROJECTS[(index + 1) % PROJECTS.length];
+
+const articleLd = {
+  '@context': 'https://schema.org',
+  '@type': 'SoftwareApplication',
+  name: project.name,
+  description: project.summary,
+  applicationCategory: project.category,
+  operatingSystem: 'Cross-platform',
+  url: project.url ?? `${SITE_URL}/work/${project.slug}`,
+  author: { '@type': 'Person', name: PERSON.name, url: SITE_URL },
+};
+
+const breadcrumbLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: PERSON.name, item: SITE_URL },
+    { '@type': 'ListItem', position: 2, name: 'Work', item: `${SITE_URL}/#work` },
+    {
+      '@type': 'ListItem',
+      position: 3,
+      name: project.name,
+      item: `${SITE_URL}/work/${project.slug}`,
+    },
+  ],
+};
+---
+
+<Base
+  title={`${project.name} — ${project.category} by ${PERSON.name}`}
+  description={project.summary}
+  path={`/work/${project.slug}`}
+  type="article"
+>
+  <Nav />
+  <main class="proj">
+    <article class="wrap">
+      <header class="proj__head">
+        <div class="proj__meta eyebrow" data-reveal>
+          <span>{num} / Work</span>
+          <span>{project.category}</span>
+          <span>{project.year}</span>
+        </div>
+        <h1 class="proj__title display" data-reveal>{project.name}</h1>
+        <p class="proj__tagline" data-reveal>{project.tagline}</p>
+      </header>
+
+      <div class="proj__grid">
+        <div class="proj__body">
+          {project.description.map((p, i) => (
+            <p class="proj__para" data-reveal style={`transition-delay:${i * 70}ms`}>{p}</p>
+          ))}
+
+          <h2 class="proj__sub mono" data-reveal>// Highlights</h2>
+          <ul class="proj__highlights">
+            {project.highlights.map((h, i) => (
+              <li data-reveal style={`transition-delay:${i * 50}ms`}>
+                <span class="mono proj__hl-num">{String(i + 1).padStart(2, '0')}</span>
+                <span>{h}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <aside class="proj__aside">
+          <div class="proj__plate" data-reveal aria-hidden="true">
+            <ProjectPlate slug={project.slug} index={index} />
+          </div>
+          <dl class="proj__facts" data-reveal>
+            <div><dt class="mono">Role</dt><dd>{project.role}</dd></div>
+            <div><dt class="mono">Status</dt><dd>{project.status}</dd></div>
+            <div><dt class="mono">Years</dt><dd>{project.year}</dd></div>
+            <div>
+              <dt class="mono">Stack</dt>
+              <dd class="proj__stack">
+                {project.stack.map((s) => <span class="mono">{s}</span>)}
+              </dd>
+            </div>
+          </dl>
+          {project.url && (
+            <a href={project.url} class="btn hover-target" data-magnetic="0.3" target="_blank" rel="noopener">
+              Visit {project.name} →
+            </a>
+          )}
+        </aside>
+      </div>
+
+      <nav class="proj__pager" aria-label="More work">
+        <a href={`/work/${prev.slug}`} class="proj__pager-link hover-target">
+          <span class="mono">← Prev</span>
+          <span class="display">{prev.name}</span>
+        </a>
+        <a href="/#work" class="mono link-underline hover-target proj__pager-all">All work</a>
+        <a href={`/work/${next.slug}`} class="proj__pager-link proj__pager-link--right hover-target">
+          <span class="mono">Next →</span>
+          <span class="display">{next.name}</span>
+        </a>
+      </nav>
+    </article>
+  </main>
+
+  <script type="application/ld+json" set:html={JSON.stringify(articleLd)} />
+  <script type="application/ld+json" set:html={JSON.stringify(breadcrumbLd)} />
+</Base>
+
+<style>
+  .proj {
+    padding-top: clamp(7rem, 16vh, 12rem);
+    padding-bottom: clamp(4rem, 10vh, 8rem);
+  }
+  .proj__head {
+    border-bottom: 1px solid var(--line);
+    padding-bottom: clamp(1.5rem, 4vw, 3rem);
+  }
+  .proj__meta {
+    display: flex;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+    margin-bottom: clamp(1rem, 3vw, 2rem);
+  }
+  .proj__title {
+    font-size: clamp(2.6rem, 7vw, 6rem);
+    line-height: 0.95;
+  }
+  .proj__tagline {
+    font-size: clamp(1.2rem, 2.6vw, 2.2rem);
+    font-weight: 600;
+    margin-top: clamp(1rem, 2vw, 1.6rem);
+    max-width: 26ch;
+  }
+  .proj__grid {
+    display: grid;
+    grid-template-columns: 1.6fr 0.9fr;
+    gap: clamp(2rem, 6vw, 6rem);
+    margin-top: clamp(2.5rem, 6vw, 5rem);
+  }
+  .proj__para {
+    font-size: clamp(1.05rem, 1.4vw, 1.35rem);
+    line-height: 1.6;
+    color: var(--smoke);
+    margin-bottom: 1.4rem;
+    max-width: 60ch;
+  }
+  .proj__para:first-child {
+    color: var(--paper);
+    font-weight: 500;
+  }
+  .proj__sub {
+    font-size: 0.8rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ash);
+    margin-top: clamp(2rem, 4vw, 3rem);
+    margin-bottom: 1.2rem;
+  }
+  .proj__highlights {
+    list-style: none;
+  }
+  .proj__highlights li {
+    display: flex;
+    gap: 1.2rem;
+    align-items: baseline;
+    border-top: 1px solid var(--line);
+    padding-block: 1rem;
+    font-size: clamp(1rem, 1.4vw, 1.25rem);
+  }
+  .proj__hl-num {
+    color: var(--ash);
+    font-size: 0.8rem;
+    flex-shrink: 0;
+  }
+  .proj__aside {
+    position: sticky;
+    top: 7rem;
+    align-self: start;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+  .proj__plate {
+    max-width: 220px;
+    opacity: 0.85;
+  }
+  @media (max-width: 880px) {
+    .proj__plate {
+      display: none;
+    }
+  }
+  .proj__facts {
+    display: grid;
+    gap: 1.4rem;
+    border: 1px solid var(--line);
+    padding: clamp(1.4rem, 3vw, 2rem);
+  }
+  .proj__facts dt {
+    font-size: 0.66rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--ash);
+    margin-bottom: 0.4rem;
+  }
+  .proj__facts dd {
+    font-size: 1rem;
+    color: var(--paper);
+  }
+  .proj__stack {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+  .proj__stack span {
+    font-size: 0.66rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    border: 1px solid var(--line-strong);
+    border-radius: 999px;
+    padding: 0.25rem 0.65rem;
+    color: var(--smoke);
+  }
+  .proj__pager {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    margin-top: clamp(3rem, 8vw, 7rem);
+    border-top: 1px solid var(--line);
+    padding-top: clamp(1.5rem, 4vw, 3rem);
+  }
+  .proj__pager-link {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  .proj__pager-link--right {
+    text-align: right;
+  }
+  .proj__pager-link .display {
+    font-size: clamp(1.6rem, 4vw, 3rem);
+    transition: opacity 0.4s;
+  }
+  .proj__pager-link:hover .display {
+    opacity: 0.55;
+  }
+  .proj__pager-link .mono {
+    font-size: 0.72rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ash);
+  }
+  @media (max-width: 880px) {
+    .proj__grid {
+      grid-template-columns: 1fr;
+    }
+    .proj__aside {
+      position: static;
+    }
+    .proj__pager-all {
+      display: none;
+    }
+  }
+</style>
