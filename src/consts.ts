@@ -19,7 +19,7 @@ export const PERSON = {
    * (requested with your address) to activate the form.
    */
   contact: {
-    web3formsKey: 'REPLACE_WITH_WEB3FORMS_ACCESS_KEY',
+    web3formsKey: 'c9a6b09e-d9b9-47c4-80ff-63b92acff698',
     endpoint: 'https://api.web3forms.com/submit',
   },
   /** One-line meta description (kept under 155 chars for SEO). */
