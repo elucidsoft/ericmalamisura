@@ -1,6 +1,6 @@
 ---
 import { PERSON, PROJECTS } from '../consts';
-const year = 2026;
+const year = new Date().getUTCFullYear();
 const products = PROJECTS.filter((p) => p.url);
 ---
 
@@ -11,13 +11,12 @@ const products = PROJECTS.filter((p) => p.url);
       Still<br />compiling.
     </h2>
     <p class="contact__note" data-reveal>
-      One engineer, from compiler to product — the type system, the runtime, the
-      tooling, the platforms. The body of work above is built end to end, and it
-      keeps growing.
+      I work across applied AI, programming languages, systems, and software products.
+      If that overlaps with a problem you are working on, send me a note.
     </p>
 
     <a href="/contact" class="contact__email display link-underline hover-target" data-reveal>
-      Write to the editor →
+      Get in touch →
     </a>
 
     <div class="contact__row" data-reveal>

@@ -19,13 +19,15 @@ const next = PROJECTS[(index + 1) % PROJECTS.length];
 
 const articleLd = {
   '@context': 'https://schema.org',
-  '@type': 'SoftwareApplication',
+  '@type': 'CreativeWork',
+  '@id': `${SITE_URL}/work/${project.slug}#project`,
   name: project.name,
   description: project.summary,
-  applicationCategory: project.category,
-  operatingSystem: 'Cross-platform',
-  url: project.url ?? `${SITE_URL}/work/${project.slug}`,
-  author: { '@type': 'Person', name: PERSON.name, url: SITE_URL },
+  genre: project.category,
+  url: `${SITE_URL}/work/${project.slug}`,
+  ...(project.url ? { sameAs: project.url } : {}),
+  creator: { '@id': `${SITE_URL}/#person` },
+  mainEntityOfPage: `${SITE_URL}/work/${project.slug}`,
 };
 
 const breadcrumbLd = {
@@ -46,12 +48,12 @@ const breadcrumbLd = {
 
 <Base
   title={`${project.name} — ${project.category} by ${PERSON.name}`}
-  description={project.summary}
+  description={project.metaDescription}
   path={`/work/${project.slug}`}
   type="article"
 >
   <Nav />
-  <main class="proj">
+  <main class="proj" id="main-content">
     <article class="wrap">
       <header class="proj__head">
         <div class="proj__meta eyebrow" data-reveal>

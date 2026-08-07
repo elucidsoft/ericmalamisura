@@ -14,18 +14,18 @@ const contactLd = {
 
 <Base
   title={`Contact — ${PERSON.name}`}
-  description={`Write to ${PERSON.name} — world-leading AI expert and creator of OriLang. Letters to the editor, forwarded directly.`}
+  description={`Contact ${PERSON.name}, applied AI engineer and creator of OriLang, about AI systems, programming languages, developer tools, and software products.`}
   path="/contact"
 >
   <Nav />
-  <main class="letters">
+  <main class="letters" id="main-content">
     <article class="wrap">
       <header class="letters__head">
-        <span class="eyebrow" data-reveal>Letters to the Editor</span>
+        <span class="eyebrow" data-reveal>Contact</span>
         <h1 class="letters__title display" data-reveal>Write to Eric.</h1>
         <p class="letters__lead" data-reveal>
-          No address is printed in this paper — the mailroom forwards every
-          letter directly. Expect a reply from the editor's desk.
+          Have a question about my work, a technical problem worth discussing,
+          or a potential collaboration? Send me a note here.
         </p>
       </header>
 
@@ -60,13 +60,13 @@ const contactLd = {
           </div>
 
           <div class="letters__field">
-            <label for="letter-message" class="mono">The letter</label>
+            <label for="letter-message" class="mono">Message</label>
             <textarea id="letter-message" name="message" rows="8" required></textarea>
           </div>
 
           <div class="letters__actions">
             <button type="submit" class="btn hover-target" data-magnetic="0.3">
-              Post the letter
+              Send message
             </button>
             <p class="letters__status mono" data-form-status aria-live="polite"></p>
           </div>

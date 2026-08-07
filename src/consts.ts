@@ -9,10 +9,10 @@ export const PERSON = {
   name: 'Eric Malamisura',
   firstName: 'Eric',
   lastName: 'Malamisura',
-  role: 'World-Leading AI Expert & Programming Language Architect',
+  role: 'Applied AI Engineer & Programming Language Designer',
   shortTitle: 'Creator of OriLang',
   location: 'United States',
-  tagline: 'Languages, compilers, and systems for the age of AI.',
+  tagline: 'AI systems, programming languages, developer tools, and software products.',
   /**
    * No email is ever rendered — all contact flows through /contact
    * (Web3Forms). Paste your access key from https://web3forms.com
@@ -24,12 +24,12 @@ export const PERSON = {
   },
   /** One-line meta description (kept under 155 chars for SEO). */
   metaDescription:
-    'Eric Malamisura — world-leading AI expert and creator of the OriLang programming language and compiler. Languages, platforms, and systems for the age of AI.',
+    'Eric Malamisura is an applied AI engineer and the creator of OriLang. He builds AI systems, programming languages, developer tools, and software products.',
   /** Longer human + machine readable bio. */
   bio: [
-    'Eric Malamisura is a world-leading AI expert of renown — a systems engineer and programming-language architect, and the creator, designer, and sole author of Ori (OriLang), a statically-typed, natively-compiled programming language built from the ground up for the age of AI.',
-    'OriLang is a from-scratch compiler with Hindley–Milner type inference, value semantics, automatic reference counting (no garbage collector, no borrow checker), capability-based effects, and first-class testing — compiling to standalone native binaries through LLVM. It is one of the most technically ambitious independent language projects in the world.',
-    'Beyond the language, Eric architects the full stack around it: a GPU-accelerated terminal emulator, production SaaS platforms serving millions of API calls, and the web frameworks that power them. He builds the compiler, the runtime, the tooling, and the product.',
+    'Eric Malamisura is an applied AI engineer, programming-language designer, and founder. He created OriLang, a statically typed, natively compiled programming language, and is building its compiler and AI-oriented language tooling.',
+    'His work on OriLang spans type inference, value semantics, automatic reference counting, capability-based effects, integrated testing, and LLVM code generation. The project reflects his focus on making ambitious systems ideas practical for working developers.',
+    'Eric also builds applied AI features, a GPU-accelerated terminal emulator, the cloudlayer.io and Upstat software products, and the WarpKit and OriJS frameworks used in those products. His work moves between AI, low-level systems engineering, and product development.',
   ],
   social: {
     github: 'https://github.com/elucidsoft',
@@ -88,6 +88,8 @@ export type Project = {
   tagline: string;
   /** Short summary for cards + meta descriptions. */
   summary: string;
+  /** Search-result summary, kept concise while the card summary can carry more detail. */
+  metaDescription: string;
   /** Full description paragraphs for the detail page + llms-full. */
   description: string[];
   highlights: string[];
@@ -107,10 +109,12 @@ export const PROJECTS: Project[] = [
     tagline: 'Functional code. Imperative speed. Native binaries.',
     summary:
       'A programming language with mandatory testing baked into the compiler — statically-typed, natively compiled, no garbage collector and no borrow checker. Built for the age of AI.',
+    metaDescription:
+      'OriLang is Eric Malamisura’s statically typed, natively compiled programming language with integrated testing, value semantics, and LLVM code generation.',
     description: [
       'OriLang is a statically-typed, expression-based, compiled programming language designed and authored entirely by Eric Malamisura. It compiles to standalone native executables on Windows, Linux, and macOS through LLVM — no garbage collector, no borrow checker, no runtime, no VM.',
-      'Its defining innovation is the memory model: Automatic Reference Counting paired with value semantics, where every variable owns its data and every assignment is a logical copy. There is no shared mutable state, no aliasing bugs, no data races, and no reference cycles — prevented by language design rather than a collector. The compiler then transforms that value-semantic code into in-place mutations, delivering imperative performance from functional source.',
-      'Testing is not a library bolted on after the fact — it is mandatory and baked into the compiler itself. If it compiles, it has tests; if it has tests, they pass. Combined with full Hindley–Milner type inference, capability-based effects, const generics, and traits with associated types, OriLang is engineered to be the language LLMs reach for: deterministic, statically verifiable, and shipped with a self-contained AI writing kit so models can author correct OriLang without it ever appearing in their training data.',
+      'OriLang pairs automatic reference counting with value semantics: variables own their data and assignments behave as logical copies. The design rules out shared mutable state and reference cycles, while compiler optimizations can turn value-semantic operations into in-place mutations.',
+      'Testing is part of the language and compiler rather than an external library. OriLang also combines Hindley–Milner type inference, capability-based effects, const generics, and traits with associated types. Its AI writing kit gives models a versioned language reference and examples, supporting AI-assisted development even though OriLang is new to model training data.',
     ],
     highlights: [
       'From-scratch compiler with LLVM native code generation',
@@ -133,13 +137,15 @@ export const PROJECTS: Project[] = [
     tagline: 'A GPU-rendered, cross-platform terminal emulator.',
     summary:
       'A GPU-rendered cross-platform terminal emulator built from the ground up — every pixel drawn by a custom renderer at 60+ FPS, with a brutalist terminal-native interface.',
+    metaDescription:
+      'OriTerminal is Eric Malamisura’s GPU-rendered, cross-platform terminal emulator, written in Rust with a custom renderer and terminal-native interface.',
     description: [
-      'OriTerminal is a GPU-accelerated terminal emulator built entirely from scratch. There are no OS controls and no borrowed platform widgets — every pixel of the grid and the application chrome is drawn by a custom GPU renderer running at 60+ FPS.',
-      'The interface follows an intentional, high-craft brutalist design language with a terminal soul: flat surfaces, structural borders that expose the grid, mechanical state changes that snap rather than ease. It is a machine that renders a terminal, and its UI is an extension of that grid rather than a skin from another design system.',
-      'OriTerminal is the companion environment to the OriLang language — a developer surface engineered for speed, precision, and total visual control.',
+      'OriTerminal is a GPU-accelerated terminal emulator written in Rust. A custom GPU renderer draws both the terminal grid and the application chrome at a 60+ FPS target instead of relying on native platform widgets.',
+      'Its interface uses a restrained brutalist design language: flat surfaces, structural borders, and quick state changes. The application chrome is designed as an extension of the terminal grid.',
+      'OriTerminal is also the companion development environment for OriLang, with a focus on rendering performance and consistent cross-platform behavior.',
     ],
     highlights: [
-      'Custom GPU renderer — no native widgets, no compromises',
+      'Custom GPU renderer for the grid and application chrome',
       '60+ FPS terminal grid and application chrome',
       'Brutalist, terminal-native design system',
       'Built from scratch in a systems language',
@@ -157,8 +163,10 @@ export const PROJECTS: Project[] = [
     tagline: 'HTML and URLs to pixel-perfect documents, at scale.',
     summary:
       'A dynamic PDF and image generation service — turn HTML, URLs, and templates into pixel-perfect PDF, PNG, and WEBP through a single API.',
+    metaDescription:
+      'cloudlayer.io is Eric Malamisura’s document conversion API for generating PDF, PNG, and WEBP files from HTML, URLs, and templates.',
     description: [
-      'cloudlayer.io is a production-grade document conversion platform that transforms HTML and URLs into pixel-perfect PDF, PNG, and WEBP output. It powers invoicing, reporting, certificates, and automated document generation for businesses across the globe.',
+      'cloudlayer.io is a document conversion platform that transforms HTML and URLs into PDF, PNG, and WEBP output. Customers use it for invoicing, reporting, certificates, and automated document generation.',
       'The system is built as a distributed, queue-driven architecture — a public API surface, a job coordinator backed by BullMQ, and a fleet of headless rendering workers — engineered for throughput, reliability, and consistent rendering fidelity.',
       'Official SDKs ship for Go, Java, JavaScript, PHP, Python, Ruby, and Rust, making the API a first-class building block in any stack.',
     ],
@@ -181,6 +189,8 @@ export const PROJECTS: Project[] = [
     tagline: 'Operational intelligence for the teams who keep things up.',
     summary:
       'A collaborative incident-response and operational-intelligence platform for DevOps, SRE, and engineering teams — monitoring, on-call, status pages, and an AI assistant.',
+    metaDescription:
+      'Upstat is Eric Malamisura’s incident-response platform for monitoring, on-call scheduling, status pages, service intelligence, and AI-assisted operations.',
     description: [
       'Upstat is a collaborative incident-response and operational-intelligence platform built for DevOps engineers, SREs, and engineering managers. It covers the full incident lifecycle alongside proactive monitoring, on-call scheduling, service cataloging, and external status communication.',
       'It pairs multi-region synthetic monitoring and heartbeat health checks with a complete incident workflow, entity-based dependency modeling with impact analysis, advanced on-call rotations, and infrastructure-independent status pages.',
@@ -206,10 +216,12 @@ export const PROJECTS: Project[] = [
     tagline: 'State-based routing for serious Svelte 5 applications.',
     summary:
       'A standalone Svelte 5 SPA framework with state-based routing, a predictable navigation pipeline, config-driven data fetching, schema-driven forms, and real-time WebSockets.',
+    metaDescription:
+      'WarpKit is Eric Malamisura’s Svelte 5 SPA framework for state-based routing, data fetching, schema-driven forms, and real-time applications.',
     description: [
       'WarpKit is a standalone Svelte 5 single-page-application framework that organizes routing around application state — unauthenticated, onboarding, authenticated — rather than around URLs alone. Every navigation flows through a predictable ten-phase pipeline with guards and middleware.',
       'It bundles a config-driven data layer with E-Tag caching and stale-while-revalidate, schema-driven forms with deep proxy binding and StandardSchema validation, type-safe real-time WebSockets with automatic reconnection, and a pluggable provider system for swapping browser APIs under test.',
-      'WarpKit is built and battle-tested in production, powering both Upstat and cloudlayer.io.',
+      'WarpKit is used in production by Upstat and cloudlayer.io while the framework remains in alpha.',
     ],
     highlights: [
       'State-based routing with a 10-phase navigation pipeline',
@@ -231,6 +243,8 @@ export const PROJECTS: Project[] = [
     tagline: 'A NestJS-inspired framework for Bun — without the decorators.',
     summary:
       'A Bun-native backend framework — fast, type-safe, with first-class testing support. Dependency injection, guards, and interceptors through TypeScript interfaces, no decorators required. Powers production systems.',
+    metaDescription:
+      'OriJS is Eric Malamisura’s Bun-native TypeScript framework with dependency injection, guards, interceptors, and testing support—without decorators.',
     description: [
       'OriJS is a NestJS-inspired web framework for the Bun runtime that deliberately avoids decorators. It delivers dependency injection, guards, interceptors, and organized controllers through plain TypeScript interfaces and a fluent builder API.',
       'It borrows the best ideas from across the ecosystem — DI and structure from NestJS, end-to-end type safety from Elysia, lightweight middleware from Hono, schema-based validation from Fastify, and structured logging from Pino — while keeping configuration explicit, testable, and free of runtime reflection.',

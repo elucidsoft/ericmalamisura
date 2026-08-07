@@ -5,21 +5,21 @@ import { PERSON, PROJECTS, SITE_URL } from '../consts';
 ---
 
 <Base
-  title={`AI Profile — ${PERSON.name} · Machine-readable bio & llms.txt`}
-  description={`A machine-readable profile of ${PERSON.name}, creator of the Ori programming language — built for LLMs, agents, and indexers. Includes llms.txt and a full dossier.`}
+  title={`AI & Machine-Readable Profile — ${PERSON.name}`}
+  description={`Canonical facts and machine-readable resources about ${PERSON.name}, applied AI engineer and creator of OriLang.`}
   path="/ai"
   type="profile"
 >
   <Nav />
-  <main class="ai">
+  <main class="ai" id="main-content">
     <article class="wrap">
       <header class="ai__head">
-        <span class="eyebrow" data-reveal>For machines</span>
-        <h1 class="ai__title display" data-reveal>The reading kit<br />for machines.</h1>
+        <span class="eyebrow" data-reveal>AI reference profile</span>
+        <h1 class="ai__title display" data-reveal>Facts, projects,<br />and source links.</h1>
         <p class="ai__lead" data-reveal>
-          A self-contained, structured package about {PERSON.name} — built so large
-          language models, AI agents, and crawlers can read, cite, and reason about
-          his work accurately. Modeled on the same llms.txt approach that ships with Ori.
+          A concise reference to help people, search engines, and AI systems describe
+          {PERSON.name} and his work accurately. The plain-text files follow the
+          emerging llms.txt convention; the project pages remain the canonical sources.
         </p>
       </header>
 
@@ -31,7 +31,7 @@ import { PERSON, PROJECTS, SITE_URL } from '../consts';
         </a>
         <a href="/llms-full.txt" class="ai__file hover-target" data-reveal>
           <span class="ai__file-name mono">/llms-full.txt</span>
-          <span class="ai__file-desc">Full dossier — every project in depth, plus guidance on how to describe Eric.</span>
+          <span class="ai__file-desc">Full profile — project details, status, role, and source links.</span>
           <span class="ai__file-go mono">Read →</span>
         </a>
       </section>
@@ -44,6 +44,7 @@ import { PERSON, PROJECTS, SITE_URL } from '../consts';
           <div><dt>Known as</dt><dd>{PERSON.shortTitle}</dd></div>
           <div><dt>Contact</dt><dd>{SITE_URL}/contact</dd></div>
           <div><dt>Website</dt><dd>{SITE_URL}</dd></div>
+          <div><dt>Last reviewed</dt><dd>August 7, 2026</dd></div>
         </dl>
       </section>
 
