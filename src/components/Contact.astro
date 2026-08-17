@@ -21,6 +21,7 @@ const products = PROJECTS.filter((p) => p.url);
 
     <div class="contact__row" data-reveal>
       <ul class="contact__links">
+        <li><a href="https://elucidsoft.com" class="mono link-underline hover-target" rel="noopener" target="_blank">Elucidsoft</a></li>
         <li><a href={PERSON.social.github} class="mono link-underline hover-target" rel="me noopener" target="_blank">GitHub</a></li>
         <li><a href="/ai" class="mono link-underline hover-target">AI Profile</a></li>
         <li><a href="/llms.txt" class="mono link-underline hover-target">llms.txt</a></li>
@@ -35,6 +36,11 @@ const products = PROJECTS.filter((p) => p.url);
     <div class="contact__products" data-reveal>
       <span class="eyebrow">In circulation</span>
       <ul class="contact__product-list">
+        <li>
+          <a href="https://elucidsoft.com" class="mono link-underline hover-target" target="_blank" rel="noopener">
+            elucidsoft.com
+          </a>
+        </li>
         {
           products.map((p) => (
             <li>
@@ -50,7 +56,7 @@ const products = PROJECTS.filter((p) => p.url);
 
   <footer class="foot">
     <div class="wrap foot__inner">
-      <span class="mono">© {year} {PERSON.name}</span>
+      <span class="mono">© {year} {PERSON.name} · Founder of <a href="https://elucidsoft.com" class="link-underline hover-target" target="_blank" rel="noopener">Elucidsoft</a></span>
       <span class="mono foot__mid">{PERSON.tagline}</span>
       <a href="/#top" class="mono link-underline hover-target">Back to top ↑</a>
     </div>

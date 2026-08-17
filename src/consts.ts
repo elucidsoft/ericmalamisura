@@ -29,11 +29,18 @@ export const PERSON = {
   bio: [
     'Eric Malamisura is an applied AI engineer, programming-language designer, and founder. He created OriLang, a statically typed, natively compiled programming language, and is building its compiler and AI-oriented language tooling.',
     'His work on OriLang spans type inference, value semantics, automatic reference counting, capability-based effects, integrated testing, and LLVM code generation. The project reflects his focus on making ambitious systems ideas practical for working developers.',
-    'Eric also builds applied AI features, a GPU-accelerated terminal emulator, the cloudlayer.io and Upstat software products, and the WarpKit and OriJS frameworks used in those products. His work moves between AI, low-level systems engineering, and product development.',
+    'Eric is the founder of Elucidsoft (founded in 2010), an independent software company. He also builds applied AI features, a GPU-accelerated terminal emulator, the cloudlayer.io and Upstat software products, and the WarpKit and OriJS frameworks used in those products. His work moves between AI, low-level systems engineering, and product development.',
   ],
+  company: {
+    name: 'Elucidsoft',
+    legalName: 'Elucidsoft LLC',
+    url: 'https://elucidsoft.com',
+    foundingYear: 2010,
+  },
   social: {
     github: 'https://github.com/elucidsoft',
     githubHandle: 'elucidsoft',
+    company: 'https://elucidsoft.com',
   },
 } as const;
 

@@ -39,7 +39,7 @@ const jsonLd = {
   jobTitle: PERSON.role,
   description: PERSON.metaDescription,
   image: `${SITE_URL}/eric.jpg`,
-  sameAs: [PERSON.social.github],
+  sameAs: [PERSON.social.github, 'https://elucidsoft.com'],
   knowsAbout: [
     'Artificial intelligence',
     'AI tooling for code generation',
@@ -52,8 +52,15 @@ const jsonLd = {
   ],
   worksFor: {
     '@type': 'Organization',
-    name: 'cloudlayer.io',
-    url: 'https://cloudlayer.io',
+    name: 'Elucidsoft',
+    url: 'https://elucidsoft.com',
+    '@id': 'https://elucidsoft.com/#organization',
+  },
+  founderOf: {
+    '@type': 'Organization',
+    name: 'Elucidsoft',
+    url: 'https://elucidsoft.com',
+    '@id': 'https://elucidsoft.com/#organization',
   },
   mainEntityOfPage: SITE_URL,
 };

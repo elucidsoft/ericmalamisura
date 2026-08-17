@@ -36,6 +36,7 @@ ${PERSON.name} (${PERSON.shortTitle}) works as an applied AI engineer and progra
 ## Contact & links
 
 - Website: ${SITE_URL}
+- Company: https://elucidsoft.com (Elucidsoft LLC)
 - Contact: ${SITE_URL}/contact
 - GitHub: ${PERSON.social.github}
 - Products: ${PROJECTS.filter((p) => p.url)

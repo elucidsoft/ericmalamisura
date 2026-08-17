@@ -20,6 +20,7 @@ ${projectLinks}
 
 ## Profiles and contact
 
+- [Elucidsoft](https://elucidsoft.com): Independent software company founded by Eric Malamisura in 2010.
 - [Full machine-readable profile](${SITE_URL}/llms-full.txt): Detailed biography, project roles, status, and technical context.
 - [AI reference profile](${SITE_URL}/ai): Visible canonical facts and links.
 - [Portfolio](${SITE_URL}): Human-readable overview and selected work.
